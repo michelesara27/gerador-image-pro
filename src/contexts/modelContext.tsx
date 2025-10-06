@@ -1,3 +1,4 @@
+// src/contexts/Model.tsx
 import React, {
   createContext,
   useContext,
@@ -6,8 +7,84 @@ import React, {
   ReactNode,
 } from "react";
 import { ImageModel } from "./ImageContext";
-import { ModelService } from "@/services/modelService";
 import { toast } from "sonner";
+
+// Mock data para os modelos (substituir por chamadas API quando necessário)
+const defaultModels: ImageModel[] = [
+  {
+    id: "corporate-portrait",
+    name: "Retrato Corporativo",
+    description:
+      "Tons profissionais, fundo neutro, ideal para perfis corporativos",
+    category: "professional",
+    filterSettings: {
+      brightness: 110,
+      contrast: 115,
+      saturate: 80,
+    },
+  },
+  {
+    id: "product-photo",
+    name: "Foto de Produto",
+    description:
+      "Fundo branco limpo, iluminação comercial perfeita para e-commerce",
+    category: "commercial",
+    filterSettings: {
+      brightness: 120,
+      contrast: 125,
+      saturate: 110,
+      blur: 0,
+    },
+  },
+  {
+    id: "linkedin-headshot",
+    name: "Headshot LinkedIn",
+    description:
+      "Estilo profissional, close no rosto, perfeito para redes profissionais",
+    category: "professional",
+    filterSettings: {
+      brightness: 105,
+      contrast: 120,
+      saturate: 90,
+    },
+  },
+  {
+    id: "editorial-magazine",
+    name: "Editorial Magazine",
+    description: "Dramático, alta moda, tons vibrantes para publicações",
+    category: "artistic",
+    filterSettings: {
+      brightness: 95,
+      contrast: 130,
+      saturate: 110,
+      hueRotate: 5,
+    },
+  },
+  {
+    id: "digital-avatar",
+    name: "Avatar Digital",
+    description: "Estilo artístico ilustrativo, cores vibrantes e modernas",
+    category: "artistic",
+    filterSettings: {
+      brightness: 110,
+      contrast: 125,
+      saturate: 140,
+      hueRotate: 10,
+    },
+  },
+  {
+    id: "minimalist",
+    name: "Minimalista",
+    description: "Clean, cores suaves, estética minimalista contemporânea",
+    category: "minimal",
+    filterSettings: {
+      brightness: 115,
+      contrast: 105,
+      saturate: 70,
+      sepia: 10,
+    },
+  },
+];
 
 interface ModelContextType {
   models: ImageModel[];
@@ -42,13 +119,14 @@ export function ModelProvider({ children }: ModelProviderProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Carregar modelos do Supabase
+  // Carregar modelos (mock data por enquanto)
   const refreshModels = async () => {
     try {
       setLoading(true);
       setError(null);
-      const modelsData = await ModelService.getAllModels();
-      setModels(modelsData);
+      // Simular delay de API
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setModels(defaultModels);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Erro ao carregar modelos";
@@ -69,7 +147,13 @@ export function ModelProvider({ children }: ModelProviderProps) {
     try {
       setLoading(true);
       setError(null);
-      const newModel = await ModelService.createModel(model);
+
+      // Simular criação de modelo
+      const newModel: ImageModel = {
+        ...model,
+        id: `model-${Date.now()}`,
+      };
+
       setModels((prev) => [newModel, ...prev]);
       toast.success("Modelo criado com sucesso!");
     } catch (err) {
@@ -90,8 +174,11 @@ export function ModelProvider({ children }: ModelProviderProps) {
     try {
       setLoading(true);
       setError(null);
-      const updatedModel = await ModelService.updateModel(id, updates);
-      setModels((prev) => prev.map((m) => (m.id === id ? updatedModel : m)));
+
+      setModels((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, ...updates } : m))
+      );
+
       toast.success("Modelo atualizado com sucesso!");
     } catch (err) {
       const errorMessage =
@@ -108,7 +195,7 @@ export function ModelProvider({ children }: ModelProviderProps) {
     try {
       setLoading(true);
       setError(null);
-      await ModelService.deleteModel(id);
+
       setModels((prev) => prev.filter((m) => m.id !== id));
       toast.success("Modelo removido com sucesso!");
     } catch (err) {
