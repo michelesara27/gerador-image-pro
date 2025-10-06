@@ -1,0 +1,334 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 240 100% 99%;
+    --foreground: 240 60% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 60% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 60% 11%;
+    --primary: 312 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 100% 97%;
+    --secondary-foreground: 240 60% 11%;
+    --muted: 240 100% 97%;
+    --muted-foreground: 240 60% 11%;
+    --accent: 168 100% 50%;
+    --accent-foreground: 240 60% 11%;
+    --destructive: 13 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 33% 93%;
+    --input: 240 33% 93%;
+    --ring: 312 100% 50%;
+    --chart-1: 312 100% 50%;
+    --chart-2: 276 100% 50%;
+    --chart-3: 188 100% 50%;
+    --chart-4: 168 100% 50%;
+    --chart-5: 56 100% 50%;
+    --sidebar: 240 100% 97%;
+    --sidebar-foreground: 240 60% 11%;
+    --sidebar-primary: 312 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 168 100% 50%;
+    --sidebar-accent-foreground: 240 60% 11%;
+    --sidebar-border: 240 33% 93%;
+    --sidebar-ring: 312 100% 50%;
+    --radius: 0.5rem;
+
+    /* Gradients atualizados */
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(312, 100%, 50%) 0%,
+      hsl(276, 100%, 50%) 50%,
+      hsl(168, 100%, 50%) 100%
+    );
+    --gradient-card: linear-gradient(
+      135deg,
+      hsla(312, 100%, 50%, 0.1) 0%,
+      hsla(276, 100%, 50%, 0.05) 100%
+    );
+    --gradient-hero: linear-gradient(
+      180deg,
+      hsl(240, 100%, 99%) 0%,
+      hsl(312, 100%, 15%) 100%
+    );
+
+    /* Glass morphism atualizado */
+    --glass-bg: hsla(0, 0%, 100%, 0.8);
+    --glass-border: hsla(240, 60%, 11%, 0.1);
+
+    /* Shadows atualizados */
+    --shadow-glow: 0 0 40px hsla(312, 100%, 50%, 0.3);
+    --shadow-card: 0 8px 32px hsla(240, 60%, 11%, 0.1);
+  }
+
+  .dark {
+    --background: 240 60% 11%;
+    --foreground: 240 33% 98%;
+    --card: 240 44% 25%;
+    --card-foreground: 240 33% 98%;
+    --popover: 240 44% 25%;
+    --popover-foreground: 240 33% 98%;
+    --primary: 312 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 44% 25%;
+    --secondary-foreground: 240 33% 98%;
+    --muted: 240 44% 16%;
+    --muted-foreground: 240 20% 65%;
+    --accent: 168 100% 50%;
+    --accent-foreground: 240 60% 11%;
+    --destructive: 13 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 44% 37%;
+    --input: 240 44% 37%;
+    --ring: 312 100% 50%;
+    --chart-1: 312 100% 50%;
+    --chart-2: 276 100% 50%;
+    --chart-3: 188 100% 50%;
+    --chart-4: 168 100% 50%;
+    --chart-5: 56 100% 50%;
+    --sidebar: 240 60% 11%;
+    --sidebar-foreground: 240 33% 98%;
+    --sidebar-primary: 312 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 168 100% 50%;
+    --sidebar-accent-foreground: 240 60% 11%;
+    --sidebar-border: 240 44% 37%;
+    --sidebar-ring: 312 100% 50%;
+
+    /* Gradients para dark mode */
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(312, 100%, 50%) 0%,
+      hsl(276, 100%, 50%) 50%,
+      hsl(168, 100%, 50%) 100%
+    );
+    --gradient-card: linear-gradient(
+      135deg,
+      hsla(312, 100%, 50%, 0.2) 0%,
+      hsla(276, 100%, 50%, 0.1) 100%
+    );
+    --gradient-hero: linear-gradient(
+      180deg,
+      hsl(240, 60%, 11%) 0%,
+      hsl(312, 100%, 15%) 100%
+    );
+
+    /* Glass morphism dark */
+    --glass-bg: hsla(240, 44%, 25%, 0.8);
+    --glass-border: hsla(240, 33%, 98%, 0.1);
+
+    /* Shadows dark */
+    --shadow-glow: 0 0 40px hsla(312, 100%, 50%, 0.4);
+    --shadow-card: 0 8px 32px hsla(0, 0%, 0%, 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Outfit", sans-serif;
+    background: var(--gradient-hero);
+    background-attachment: fixed;
+  }
+
+  /* Font families específicas */
+  .font-sans {
+    font-family: "Outfit", sans-serif;
+  }
+
+  .font-mono {
+    font-family: "Fira Code", monospace;
+  }
+
+  /* Glass card component */
+  .glass-card {
+    @apply bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)];
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+
+  /* Gradient background */
+  .gradient-bg {
+    background-image: var(--gradient-primary);
+  }
+
+  /* Gradient card */
+  .gradient-card {
+    background-image: var(--gradient-card);
+  }
+
+  /* Animations */
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px hsla(312, 100%, 50%, 0.3);
+    }
+    to {
+      box-shadow: 0 0 40px hsla(312, 100%, 50%, 0.6),
+        0 0 60px hsla(168, 100%, 50%, 0.3);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Custom shadows */
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Button styles atualizados */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200;
+  }
+
+  /* Input styles */
+  .input-field {
+    @apply bg-background border-border text-foreground placeholder-muted-foreground focus:ring-ring focus:border-ring;
+  }
+
+  /* Card styles */
+  .modern-card {
+    @apply bg-card border-border shadow-card rounded-lg transition-all duration-200 hover:shadow-glow;
+  }
+}
+
+/* Componentes customizados */
+@layer components {
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-secondary text-foreground;
+  }
+
+  .nav-item.active {
+    @apply bg-primary text-primary-foreground shadow-glow;
+  }
+
+  .badge-primary {
+    @apply bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-accent {
+    @apply bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .status-completed {
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 px-3 py-1 rounded-full text-sm;
+  }
+
+  .status-processing {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-3 py-1 rounded-full text-sm;
+  }
+
+  .status-error {
+    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 px-3 py-1 rounded-full text-sm;
+  }
+}
+
+/* Utilidades customizadas */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-grid {
+    background-image: linear-gradient(
+        to right,
+        hsl(var(--border)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .bg-dots {
+    background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+}
+
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+  background-color: hsl(var(--primary) / 0.3);
+  color: hsl(var(--primary-foreground));
+}
