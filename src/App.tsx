@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ImageProvider } from "./contexts/ImageContext";
 import { TemplateProvider } from "./contexts/TemplateContext";
-import { ModelProvider } from "./contexts/ModelContext"; // ✅ NOVO
+import { ModelProvider } from "./contexts/ModelContext"; // ✅ AGORA EXISTE
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
@@ -27,7 +27,7 @@ const App = () => (
             <TemplateProvider>
               <ModelProvider>
                 {" "}
-                {/* ✅ NOVO PROVIDER */}
+                {/* ✅ PROVIDER ADICIONADO */}
                 <Toaster />
                 <Sonner />
                 <Routes>
@@ -43,8 +43,7 @@ const App = () => (
                   />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </ModelProvider>{" "}
-              {/* ✅ FECHAMENTO DO NOVO PROVIDER */}
+              </ModelProvider>
             </TemplateProvider>
           </ImageProvider>
         </AuthProvider>

@@ -13,14 +13,12 @@ import {
   Trash2,
   Filter,
   Search,
-  Sliders,
 } from "lucide-react";
 import { toast } from "sonner";
 
 const Models = () => {
   const navigate = useNavigate();
-  const { models, addModel, updateModel, deleteModel, loading, error } =
-    useModels();
+  const { models, addModel, deleteModel, loading, error } = useModels();
   const { getImagesByModel } = useImages();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -115,24 +113,14 @@ const Models = () => {
             </p>
           </div>
 
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/dashboard")}
-              className="flex items-center gap-2"
-            >
-              <ArrowRight className="w-4 h-4 rotate-180" />
-              Voltar
-            </Button>
-            <Button
-              onClick={handleCreateModel}
-              disabled={loading}
-              className="bg-gradient-to-r from-primary to-purple-600 shadow-glow flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Novo Modelo
-            </Button>
-          </div>
+          <Button
+            onClick={handleCreateModel}
+            disabled={loading}
+            className="bg-gradient-to-r from-primary to-purple-600 shadow-glow flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Novo Modelo
+          </Button>
         </div>
 
         {/* Filtros */}
@@ -226,9 +214,6 @@ const Models = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => {
-                                /* Implementar edição */
-                              }}
                               className="h-8 w-8 p-0"
                             >
                               <Edit2 className="w-3 h-3" />
@@ -269,16 +254,6 @@ const Models = () => {
                               {model.filterSettings.saturate}%
                             </span>
                           </div>
-                          {model.filterSettings.blur !== undefined && (
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">
-                                Blur
-                              </span>
-                              <span className="font-medium">
-                                {model.filterSettings.blur}px
-                              </span>
-                            </div>
-                          )}
                         </div>
 
                         <div className="flex items-center justify-between pt-4 border-t border-border">
@@ -307,9 +282,9 @@ const Models = () => {
 
         {/* Card Informativo */}
         <div className="glass-card rounded-2xl p-8 text-center bg-gradient-card border-2 border-primary/20">
-          <h3 className="text-xl font-bold mb-2">Mais modelos em breve!</h3>
+          <h3 className="text-xl font-bold mb-2">Modelos de Processamento</h3>
           <p className="text-muted-foreground mb-4">
-            Estamos constantemente adicionando novos modelos para você explorar
+            Cada modelo aplica filtros específicos para transformar suas imagens
           </p>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20">
             <Sparkles className="w-4 h-4 text-primary" />
