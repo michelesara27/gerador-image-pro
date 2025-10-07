@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ImageProvider } from "./contexts/ImageContext";
 import { TemplateProvider } from "./contexts/TemplateContext";
-// import { ModelProvider } from "./contexts/ModelContext"; // ❌ COMENTADO TEMPORARIAMENTE
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
@@ -25,7 +24,6 @@ const App = () => (
         <AuthProvider>
           <ImageProvider>
             <TemplateProvider>
-              {/* <ModelProvider> COMENTADO TEMPORARIAMENTE */}
               <Toaster />
               <Sonner />
               <Routes>
@@ -41,7 +39,6 @@ const App = () => (
                 />
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              {/* </ModelProvider> COMENTADO TEMPORARIAMENTE */}
             </TemplateProvider>
           </ImageProvider>
         </AuthProvider>

@@ -1,7 +1,6 @@
 // src/pages/Models.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useImages } from "@/contexts/ImageContext";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +15,7 @@ import {
 import { toast } from "sonner";
 
 // Dados locais para modelos
-const localModels = [
+const defaultModels = [
   {
     id: "corporate-portrait",
     name: "Retrato Corporativo",
@@ -54,12 +53,47 @@ const localModels = [
       saturate: 90,
     },
   },
+  {
+    id: "editorial-magazine",
+    name: "Editorial Magazine",
+    description: "Dramático, alta moda, tons vibrantes para publicações",
+    category: "artistic",
+    filterSettings: {
+      brightness: 95,
+      contrast: 130,
+      saturate: 110,
+      hueRotate: 5,
+    },
+  },
+  {
+    id: "digital-avatar",
+    name: "Avatar Digital",
+    description: "Estilo artístico ilustrativo, cores vibrantes e modernas",
+    category: "artistic",
+    filterSettings: {
+      brightness: 110,
+      contrast: 125,
+      saturate: 140,
+      hueRotate: 10,
+    },
+  },
+  {
+    id: "minimalist",
+    name: "Minimalista",
+    description: "Clean, cores suaves, estética minimalista contemporânea",
+    category: "minimal",
+    filterSettings: {
+      brightness: 115,
+      contrast: 105,
+      saturate: 70,
+      sepia: 10,
+    },
+  },
 ];
 
 const Models = () => {
   const navigate = useNavigate();
-  const { getImagesByModel } = useImages();
-  const [models, setModels] = useState(localModels);
+  const [models, setModels] = useState(defaultModels);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -119,11 +153,21 @@ const Models = () => {
     };
 
     try {
+      setLoading(true);
+      // Simular delay de API
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setModels((prev) => [newModel, ...prev]);
       toast.success("Modelo criado com sucesso!");
     } catch (error) {
       toast.error("Erro ao criar modelo.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // Função mock para uso (substituir por real quando necessário)
+  const getImagesByModel = (modelId: string) => {
+    return [];
   };
 
   return (
@@ -211,7 +255,7 @@ const Models = () => {
                 }
                 acc[model.category].push(model);
                 return acc;
-              }, {} as Record<string, typeof models>)
+              }, {} as Record<string, typeof filteredModels>)
             ).map(([category, categoryModels]) => (
               <div key={category} className="space-y-4">
                 <h2 className="text-2xl font-semibold text-foreground">
@@ -278,6 +322,16 @@ const Models = () => {
                               {model.filterSettings.saturate}%
                             </span>
                           </div>
+                          {model.filterSettings.blur !== undefined && (
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">
+                                Blur
+                              </span>
+                              <span className="font-medium">
+                                {model.filterSettings.blur}px
+                              </span>
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex items-center justify-between pt-4 border-t border-border">
