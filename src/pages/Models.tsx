@@ -1,7 +1,6 @@
 // src/pages/Models.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useModels } from "@/contexts/ModelContext";
 import { useImages } from "@/contexts/ImageContext";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -16,10 +15,52 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+// Dados locais para modelos
+const localModels = [
+  {
+    id: "corporate-portrait",
+    name: "Retrato Corporativo",
+    description:
+      "Tons profissionais, fundo neutro, ideal para perfis corporativos",
+    category: "professional",
+    filterSettings: {
+      brightness: 110,
+      contrast: 115,
+      saturate: 80,
+    },
+  },
+  {
+    id: "product-photo",
+    name: "Foto de Produto",
+    description:
+      "Fundo branco limpo, iluminação comercial perfeita para e-commerce",
+    category: "commercial",
+    filterSettings: {
+      brightness: 120,
+      contrast: 125,
+      saturate: 110,
+      blur: 0,
+    },
+  },
+  {
+    id: "linkedin-headshot",
+    name: "Headshot LinkedIn",
+    description:
+      "Estilo profissional, close no rosto, perfeito para redes profissionais",
+    category: "professional",
+    filterSettings: {
+      brightness: 105,
+      contrast: 120,
+      saturate: 90,
+    },
+  },
+];
+
 const Models = () => {
   const navigate = useNavigate();
-  const { models, addModel, deleteModel, loading, error } = useModels();
   const { getImagesByModel } = useImages();
+  const [models, setModels] = useState(localModels);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -52,7 +93,7 @@ const Models = () => {
       window.confirm(`Tem certeza que deseja excluir o modelo "${model.name}"?`)
     ) {
       try {
-        await deleteModel(model.id);
+        setModels((prev) => prev.filter((m) => m.id !== model.id));
         toast.success("Modelo excluído com sucesso!");
       } catch (error) {
         toast.error("Erro ao excluir modelo.");
@@ -62,6 +103,7 @@ const Models = () => {
 
   const handleCreateModel = async () => {
     const newModel = {
+      id: `model-${Date.now()}`,
       name: "Novo Modelo Personalizado",
       description: "Descrição do novo modelo personalizado",
       category: "professional",
@@ -77,30 +119,12 @@ const Models = () => {
     };
 
     try {
-      await addModel(newModel);
+      setModels((prev) => [newModel, ...prev]);
       toast.success("Modelo criado com sucesso!");
     } catch (error) {
       toast.error("Erro ao criar modelo.");
     }
   };
-
-  if (error) {
-    return (
-      <DashboardLayout>
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="text-center py-12">
-            <div className="text-destructive mb-4">
-              <p className="text-lg font-semibold">Erro ao carregar modelos</p>
-              <p className="text-muted-foreground">{error}</p>
-            </div>
-            <Button onClick={() => window.location.reload()} variant="outline">
-              Tentar Novamente
-            </Button>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
 
   return (
     <DashboardLayout>
