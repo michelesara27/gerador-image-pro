@@ -1,6 +1,8 @@
 // src/pages/Models.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useModels } from "@/contexts/ModelContext";
+import { useImages } from "@/contexts/ImageContext";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,90 +13,15 @@ import {
   Trash2,
   Filter,
   Search,
+  Sliders,
 } from "lucide-react";
 import { toast } from "sonner";
 
-// Dados locais para modelos
-const defaultModels = [
-  {
-    id: "corporate-portrait",
-    name: "Retrato Corporativo",
-    description:
-      "Tons profissionais, fundo neutro, ideal para perfis corporativos",
-    category: "professional",
-    filterSettings: {
-      brightness: 110,
-      contrast: 115,
-      saturate: 80,
-    },
-  },
-  {
-    id: "product-photo",
-    name: "Foto de Produto",
-    description:
-      "Fundo branco limpo, iluminação comercial perfeita para e-commerce",
-    category: "commercial",
-    filterSettings: {
-      brightness: 120,
-      contrast: 125,
-      saturate: 110,
-      blur: 0,
-    },
-  },
-  {
-    id: "linkedin-headshot",
-    name: "Headshot LinkedIn",
-    description:
-      "Estilo profissional, close no rosto, perfeito para redes profissionais",
-    category: "professional",
-    filterSettings: {
-      brightness: 105,
-      contrast: 120,
-      saturate: 90,
-    },
-  },
-  {
-    id: "editorial-magazine",
-    name: "Editorial Magazine",
-    description: "Dramático, alta moda, tons vibrantes para publicações",
-    category: "artistic",
-    filterSettings: {
-      brightness: 95,
-      contrast: 130,
-      saturate: 110,
-      hueRotate: 5,
-    },
-  },
-  {
-    id: "digital-avatar",
-    name: "Avatar Digital",
-    description: "Estilo artístico ilustrativo, cores vibrantes e modernas",
-    category: "artistic",
-    filterSettings: {
-      brightness: 110,
-      contrast: 125,
-      saturate: 140,
-      hueRotate: 10,
-    },
-  },
-  {
-    id: "minimalist",
-    name: "Minimalista",
-    description: "Clean, cores suaves, estética minimalista contemporânea",
-    category: "minimal",
-    filterSettings: {
-      brightness: 115,
-      contrast: 105,
-      saturate: 70,
-      sepia: 10,
-    },
-  },
-];
-
 const Models = () => {
   const navigate = useNavigate();
-  const [models, setModels] = useState(defaultModels);
-  const [loading, setLoading] = useState(false);
+  const { models, addModel, updateModel, deleteModel, loading, error } =
+    useModels();
+  const { getImagesByModel } = useImages();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -127,7 +54,7 @@ const Models = () => {
       window.confirm(`Tem certeza que deseja excluir o modelo "${model.name}"?`)
     ) {
       try {
-        setModels((prev) => prev.filter((m) => m.id !== model.id));
+        await deleteModel(model.id);
         toast.success("Modelo excluído com sucesso!");
       } catch (error) {
         toast.error("Erro ao excluir modelo.");
@@ -137,7 +64,6 @@ const Models = () => {
 
   const handleCreateModel = async () => {
     const newModel = {
-      id: `model-${Date.now()}`,
       name: "Novo Modelo Personalizado",
       description: "Descrição do novo modelo personalizado",
       category: "professional",
@@ -153,22 +79,30 @@ const Models = () => {
     };
 
     try {
-      setLoading(true);
-      // Simular delay de API
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setModels((prev) => [newModel, ...prev]);
+      await addModel(newModel);
       toast.success("Modelo criado com sucesso!");
     } catch (error) {
       toast.error("Erro ao criar modelo.");
-    } finally {
-      setLoading(false);
     }
   };
 
-  // Função mock para uso (substituir por real quando necessário)
-  const getImagesByModel = (modelId: string) => {
-    return [];
-  };
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="text-center py-12">
+            <div className="text-destructive mb-4">
+              <p className="text-lg font-semibold">Erro ao carregar modelos</p>
+              <p className="text-muted-foreground">{error}</p>
+            </div>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              Tentar Novamente
+            </Button>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -181,14 +115,24 @@ const Models = () => {
             </p>
           </div>
 
-          <Button
-            onClick={handleCreateModel}
-            disabled={loading}
-            className="bg-gradient-to-r from-primary to-purple-600 shadow-glow flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Novo Modelo
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/dashboard")}
+              className="flex items-center gap-2"
+            >
+              <ArrowRight className="w-4 h-4 rotate-180" />
+              Voltar
+            </Button>
+            <Button
+              onClick={handleCreateModel}
+              disabled={loading}
+              className="bg-gradient-to-r from-primary to-purple-600 shadow-glow flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Novo Modelo
+            </Button>
+          </div>
         </div>
 
         {/* Filtros */}
@@ -255,7 +199,7 @@ const Models = () => {
                 }
                 acc[model.category].push(model);
                 return acc;
-              }, {} as Record<string, typeof filteredModels>)
+              }, {} as Record<string, typeof models>)
             ).map(([category, categoryModels]) => (
               <div key={category} className="space-y-4">
                 <h2 className="text-2xl font-semibold text-foreground">
@@ -282,6 +226,9 @@ const Models = () => {
                             <Button
                               size="sm"
                               variant="outline"
+                              onClick={() => {
+                                /* Implementar edição */
+                              }}
                               className="h-8 w-8 p-0"
                             >
                               <Edit2 className="w-3 h-3" />
@@ -360,9 +307,9 @@ const Models = () => {
 
         {/* Card Informativo */}
         <div className="glass-card rounded-2xl p-8 text-center bg-gradient-card border-2 border-primary/20">
-          <h3 className="text-xl font-bold mb-2">Modelos de Processamento</h3>
+          <h3 className="text-xl font-bold mb-2">Mais modelos em breve!</h3>
           <p className="text-muted-foreground mb-4">
-            Cada modelo aplica filtros específicos para transformar suas imagens
+            Estamos constantemente adicionando novos modelos para você explorar
           </p>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20">
             <Sparkles className="w-4 h-4 text-primary" />
